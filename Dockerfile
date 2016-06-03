@@ -16,10 +16,6 @@ ARG gid=1000
 RUN groupadd -g ${gid} ${group} \
     && useradd -d "$JENKINS_HOME" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
 
-# Jenkins home directory is a volume, so configuration and build history 
-# can be persisted and survive image upgrades
-VOLUME /var/jenkins_home
-
 # `/usr/share/jenkins/ref/` contains all reference configuration we want 
 # to set on a fresh new installation. Use it to bundle additional plugins 
 # or config file with your custom jenkins Docker image.
@@ -46,6 +42,10 @@ RUN curl -fsSL http://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war
 
 ENV JENKINS_UC https://updates.jenkins.io
 RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins/ref
+
+# Jenkins home directory is a volume, so configuration and build history 
+# can be persisted and survive image upgrades
+VOLUME /var/jenkins_home
 
 # for main web interface:
 EXPOSE 8080
