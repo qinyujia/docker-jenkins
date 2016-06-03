@@ -46,6 +46,7 @@ RUN ls -l /var
 # Jenkins home directory is a volume, so configuration and build history 
 # can be persisted and survive image upgrades
 VOLUME /var/jenkins_home
+RUN ls -l /var
 
 # for main web interface:
 EXPOSE 8080
