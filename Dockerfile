@@ -16,11 +16,6 @@ ARG gid=1000
 RUN addgroup -g ${gid} ${group} \
     && adduser -h "$JENKINS_HOME" -u ${uid} -G ${group} -s /bin/bash -D ${user}
 
-# Jenkins home directory is a volume, so configuration and build history 
-# can be persisted and survive image upgrades
-RUN chown -R 1000 /var/jenkins_home
-VOLUME /var/jenkins_home
-
 # `/usr/share/jenkins/ref/` contains all reference configuration we want 
 # to set on a fresh new installation. Use it to bundle additional plugins 
 # or config file with your custom jenkins Docker image.
@@ -59,6 +54,11 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 USER ${user}
 
 COPY jenkins.sh /usr/local/bin/jenkins.sh
+
+# Jenkins home directory is a volume, so configuration and build history 
+# can be persisted and survive image upgrades
+VOLUME /var/jenkins_home
+
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
