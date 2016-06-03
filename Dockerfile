@@ -18,6 +18,7 @@ RUN addgroup -g ${gid} ${group} \
 
 # Jenkins home directory is a volume, so configuration and build history 
 # can be persisted and survive image upgrades
+RUN chown -R 1000 /var/jenkins_home
 VOLUME /var/jenkins_home
 
 # `/usr/share/jenkins/ref/` contains all reference configuration we want 
